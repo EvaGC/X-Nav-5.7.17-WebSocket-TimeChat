@@ -5,6 +5,7 @@
 
 import signal
 import sys
+import time
 import ssl
 import logging
 from SimpleWebSocketServer import WebSocket, SimpleWebSocketServer, SimpleSSLWebSocketServer
@@ -38,11 +39,14 @@ class SimpleChat(WebSocket):
             self.data = ''
 
         for client in self.server.connections.itervalues():
-            if client != self:
-                try:
-                    client.sendMessage(str(self.address[0]) + ' - ' + str(self.data))
-                except Exception as n:
-                    print n
+            #if client != self:
+            if (str(self.data) == "getTime"):
+            	client.sendMessage(str(self.address[0]) + ' - ' + "FECHA: " + time.strftime("%d/%m/%y") + " " + "HORA: " + time.strftime("%H:%M:%S"))
+            else:
+	            try:
+	                client.sendMessage(str(self.address[0]) + ' - ' + str(self.data))
+	            except Exception as n:
+	                print n
 
     def handleConnected(self):
         print self.address, 'connected'
